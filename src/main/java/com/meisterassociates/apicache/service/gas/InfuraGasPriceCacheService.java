@@ -3,7 +3,7 @@ package com.meisterassociates.apicache.service.gas;
 import com.meisterassociates.apicache.data.CacheRepository;
 import com.meisterassociates.apicache.data.QueryFilter;
 import com.meisterassociates.apicache.model.GasPrice;
-import com.meisterassociates.apicache.service.infura.v1.InfuraApiServiceBase;
+import com.meisterassociates.apicache.service.infura.InfuraApiServiceBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class InfuraGasPriceCacheService implements GasPriceService{
     /**
      * {@inheritDoc}
      */
-    public GasPrice getCurrentGasPrice() {
+    public GasPrice getCurrentGasPrice() throws Exception {
         if (this.shouldFetchCurrentGasPrice()) {
             return this.fetchAndCacheCurrentGasPrice();
         }
@@ -76,7 +76,7 @@ public class InfuraGasPriceCacheService implements GasPriceService{
      *
      * @return the newly-cached GasPrice.
      */
-    private synchronized GasPrice fetchAndCacheCurrentGasPrice() {
+    private synchronized GasPrice fetchAndCacheCurrentGasPrice() throws Exception {
         if (! this.shouldFetchCurrentGasPrice()) {
             // This means that there was a race condition and some other request refreshed the cache first.
             return getCurrentGasPrice();

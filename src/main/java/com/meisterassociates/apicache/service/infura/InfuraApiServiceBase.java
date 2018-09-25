@@ -1,4 +1,4 @@
-package com.meisterassociates.apicache.service.infura.v1;
+package com.meisterassociates.apicache.service.infura;
 
 import com.meisterassociates.apicache.model.Block;
 import com.meisterassociates.apicache.model.GasPrice;
@@ -9,7 +9,7 @@ public interface InfuraApiServiceBase {
      *
      * @return The GasPrice object, parsed from the Infura API.
      */
-    GasPrice getGasPriceInWei();
+    GasPrice getGasPriceInWei() throws Exception;
 
     /**
      * Gets the {@link Block} with the provided block hash from the Infura API, if one exists.

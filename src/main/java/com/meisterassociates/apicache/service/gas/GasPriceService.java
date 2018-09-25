@@ -15,7 +15,7 @@ public interface GasPriceService {
      *
      * @return the gas price.
      */
-    GasPrice getCurrentGasPrice();
+    GasPrice getCurrentGasPrice() throws Exception;
 
     /**
      * Gets the average {@link GasPrice} between the provided {@link LocalDateTime} and now.
