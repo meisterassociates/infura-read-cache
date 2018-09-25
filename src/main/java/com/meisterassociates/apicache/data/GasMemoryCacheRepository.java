@@ -1,6 +1,8 @@
 package com.meisterassociates.apicache.data;
 
 import com.meisterassociates.apicache.model.GasPrice;
+import com.meisterassociates.apicache.util.QueryFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -8,21 +10,18 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
+/**
+ * In-memory {@link CacheRepository<GasPrice>} implementation for {@link GasPrice} caching.
+ */
 @Repository
 public class GasMemoryCacheRepository implements GasCacheRepository {
-    private static final int defaultPurgeAfterSeconds = 700_000;  // A little over a week.
 
+    @Value("${gas.cache.purge.after.seconds}")
+    private int purgeAfterSeconds;
     private ConcurrentLinkedDeque<GasPrice> cache;
-    private final int purgeAfterSeconds;
 
     public GasMemoryCacheRepository() {
         this.cache = new ConcurrentLinkedDeque<>();
-        this.purgeAfterSeconds = defaultPurgeAfterSeconds;
-    }
-
-    public GasMemoryCacheRepository(int purgeAfterSeconds) {
-        this.cache = new ConcurrentLinkedDeque<>();
-        this.purgeAfterSeconds = purgeAfterSeconds;
     }
 
     /**

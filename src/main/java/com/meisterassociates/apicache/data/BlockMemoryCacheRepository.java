@@ -2,6 +2,9 @@ package com.meisterassociates.apicache.data;
 
 import com.meisterassociates.apicache.model.CacheableModel;
 import com.meisterassociates.apicache.model.Block;
+import com.meisterassociates.apicache.util.QueryFilter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -12,21 +15,15 @@ import java.util.stream.Collectors;
 /**
  * In-memory {@link CacheRepository<Block>} implementation for {@link Block} caching.
  */
+@Repository
 public class BlockMemoryCacheRepository implements BlockCacheRepository {
 
-    private static final int defaultPurgeAfterSeconds = 700_000;  // A little over a week.
-
+    @Value("${block.cache.purge.after.seconds}")
+    private int purgeAfterSeconds;
     private ConcurrentHashMap<String, Block> cache;
-    private final int purgeAfterSeconds;
 
     public BlockMemoryCacheRepository() {
         this.cache = new ConcurrentHashMap<>();
-        this.purgeAfterSeconds = defaultPurgeAfterSeconds;
-    }
-
-    public BlockMemoryCacheRepository(int purgeAfterSeconds) {
-        this.cache = new ConcurrentHashMap<>();
-        this.purgeAfterSeconds = purgeAfterSeconds;
     }
 
     /**

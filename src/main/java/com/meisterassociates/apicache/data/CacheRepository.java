@@ -1,6 +1,7 @@
 package com.meisterassociates.apicache.data;
 
 import com.meisterassociates.apicache.model.CacheableModel;
+import com.meisterassociates.apicache.util.QueryFilter;
 
 import java.util.List;
 

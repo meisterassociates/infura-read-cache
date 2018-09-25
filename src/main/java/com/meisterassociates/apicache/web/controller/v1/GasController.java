@@ -1,7 +1,8 @@
-package com.meisterassociates.apicache.web.controller;
+package com.meisterassociates.apicache.web.controller.v1;
 
 import com.meisterassociates.apicache.service.gas.GasPriceService;
 import com.meisterassociates.apicache.util.Utils;
+import com.meisterassociates.apicache.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class GasController extends BaseController {
     @GetMapping("/v1/jsonrpc/ropsten/eth_gasPrice")
     public ResponseEntity getGasPrice() {
         try {
-            return this.getSuccessPayload(HttpStatus.OK, this.gasPriceService.getCurrentGasPrice().toMap());
+            return this.getSuccessPayloadRaw(this.gasPriceService.getCurrentGasPrice().toMap());
         } catch (Exception ex) {
             logger.error("Error getting Current Gas Price", ex);
             return this.getErrorPayload(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting current Gas Price. Please try back later.");
@@ -32,7 +33,7 @@ public class GasController extends BaseController {
     public ResponseEntity getGasPriceAverageLastDay(@PathVariable int hours) {
         try {
             var averagePrice = this.gasPriceService.getAverageGasPriceSince(LocalDateTime.now().minusHours(hours));
-            return this.getSuccessPayloadSingleItem(HttpStatus.OK, Utils.getHexString(averagePrice));
+            return this.getSuccessPayload(Utils.getHexString(averagePrice));
         } catch (Exception ex) {
             var message = String.format("Error getting average Gas Price for the past %s hours", hours);
             logger.error(message, ex);

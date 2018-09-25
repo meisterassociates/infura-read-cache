@@ -9,15 +9,15 @@ import java.util.Map;
 
 public class GasPrice extends CacheableModel {
 
-    private final int id;
+    private final long id;
     private final String jsonrpc;
     private final BigInteger priceInWei;
 
-    public GasPrice(int id, String jsonrpc, BigInteger priceInWei) {
+    public GasPrice(long id, String jsonrpc, BigInteger priceInWei) {
         this(id, jsonrpc, priceInWei, LocalDateTime.now());
     }
 
-    public GasPrice(int id, String jsonrpc, BigInteger priceInWei, LocalDateTime datetime) {
+    public GasPrice(long id, String jsonrpc, BigInteger priceInWei, LocalDateTime datetime) {
         super(datetime);
 
         this.id = id;

@@ -1,9 +1,9 @@
 package com.meisterassociates.apicache.service.gas;
 
-import com.meisterassociates.apicache.data.CacheRepository;
-import com.meisterassociates.apicache.data.QueryFilter;
+import com.meisterassociates.apicache.data.GasCacheRepository;
 import com.meisterassociates.apicache.model.GasPrice;
 import com.meisterassociates.apicache.service.infura.InfuraApiServiceBase;
+import com.meisterassociates.apicache.util.QueryFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,15 @@ public class InfuraGasPriceCacheService implements GasPriceService{
 
     @Value("${gas.price.refresh.seconds}")
     private int secondsToCache;
-    @Autowired
-    private CacheRepository<GasPrice> gasPriceCache;
-    @Autowired
+    private GasCacheRepository gasPriceCache;
     private InfuraApiServiceBase infuraApi;
     private LocalDateTime lastRefresh;
 
 
-    public InfuraGasPriceCacheService() {
+    @Autowired
+    public InfuraGasPriceCacheService(GasCacheRepository gasPriceCache, InfuraApiServiceBase infuraApi) {
+        this.infuraApi = infuraApi;
+        this.gasPriceCache = gasPriceCache;
         this.lastRefresh = LocalDateTime.MIN;
     }
 

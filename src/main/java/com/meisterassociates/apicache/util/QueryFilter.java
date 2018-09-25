@@ -1,4 +1,6 @@
-package com.meisterassociates.apicache.data;
+package com.meisterassociates.apicache.util;
+
+import com.meisterassociates.apicache.data.CacheRepository;
 
 import java.time.LocalDateTime;
 
@@ -6,25 +8,26 @@ import java.time.LocalDateTime;
  * Base class representing a filter for a {@link CacheRepository} query.
  */
 public class QueryFilter {
-    private static final int defaultPage = 0;
-    private static final int defaultPageSize = 25;
+    public static final QueryFilter ALL_ITEMS_QUERY_FILTER = new QueryFilter(0, Integer.MAX_VALUE);
+
+    public static final int DEFAULT_PAGE_SIZE = 25;
+    private static final int DEFAULT_PAGE = 0;
 
     private int page;
     private int pageSize;
-    private String uniqueId;
     private LocalDateTime since;
 
     /**
      * Default QueryFilter constructor, populating the default page and pageSize.
      */
     public QueryFilter() {
-        this.page = defaultPage;
-        this.pageSize = defaultPageSize;
+        this.page = DEFAULT_PAGE;
+        this.pageSize = DEFAULT_PAGE_SIZE;
         this.since = null;
     }
 
     public QueryFilter(LocalDateTime since) {
-        this(defaultPage, defaultPageSize, since);
+        this(DEFAULT_PAGE, DEFAULT_PAGE_SIZE, since);
     }
 
     /**

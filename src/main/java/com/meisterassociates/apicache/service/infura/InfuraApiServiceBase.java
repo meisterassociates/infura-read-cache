@@ -17,5 +17,5 @@ public interface InfuraApiServiceBase {
      * @param hash the hash for the Block being requested.
      * @return The Block if one exists, else null
      */
-    Block getBlockByHash(String hash);
+    Block getBlockByHash(String hash) throws Exception;
 }

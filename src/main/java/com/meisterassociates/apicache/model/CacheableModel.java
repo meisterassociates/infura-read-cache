@@ -1,5 +1,7 @@
 package com.meisterassociates.apicache.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 public abstract class CacheableModel {
@@ -13,6 +15,7 @@ public abstract class CacheableModel {
         this.datetime = datetime;
     }
 
+    @JsonIgnore
     public LocalDateTime getDatetime() {
         return datetime;
     }
