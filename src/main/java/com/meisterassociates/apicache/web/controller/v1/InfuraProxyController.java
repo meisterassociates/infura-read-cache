@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class InfuraProxyController extends BaseController {
-    @Value("${infura.server.url}")
+    @Value("${infura.base.url}")
     private String infuraServerUrl;
 
     @RequestMapping("/**")

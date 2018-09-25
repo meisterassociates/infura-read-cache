@@ -20,7 +20,7 @@ import java.util.Map;
 public class InfuraApiService implements InfuraApiServiceBase {
     private static final Logger logger = LogManager.getLogger(InfuraApiService.class);
 
-    @Value("${infura.base.url}")
+    @Value("${infura.base.url}" + "${infura.v1.path}")
     private String infuraBaseUrl;
 
     private static final String ethGasPriceEndpoint = "eth_gasPrice";
