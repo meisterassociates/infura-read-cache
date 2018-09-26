@@ -41,6 +41,7 @@ Run `./gradlew bootRun -Pargs=<comma-separated arguments here>`
 * `--block.cache.purge.after.seconds` configures the time period after which Blocks cached in memory will be purged
 * `--infura.base.url` the base url for all infura API calls
 * `--infura.v1.path` the path to be appended to the `infura.base.url` for v1 requests
+* `--infura.healthy.failed.read.limit` the number of consecutive failed reads from Infura to tolerate before health checks start failing
 
 ## Viewing Logs
 Run logs can be found in `logs/` in the project's root directory. `app.log` is the application log is probably of the most interest, but `springboot.log` is there as well to diagnose any boot issues that arise. 
