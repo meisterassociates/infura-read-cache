@@ -26,6 +26,18 @@ public class GasPrice extends CacheableModel {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof GasPrice)) {
+            return false;
+        }
+        var other = (GasPrice)obj;
+
+        return other.id == this.id
+                && other.jsonrpc.equals(this.jsonrpc)
+                && other.priceInWei.equals(this.priceInWei);
+    }
+
+    @Override
     public String toString() {
         return String.format("{jsonrpc: %s, id: %s, priceInWei: %s, datetime: %s}", this.jsonrpc, this.id,
                 this.priceInWei, datetime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -35,7 +47,7 @@ public class GasPrice extends CacheableModel {
         return Map.of("jsonrpc", this.jsonrpc, "id", this.id, "result", Utils.getHexString(this.priceInWei));
     }
 
-    public BigInteger getGasPriceInWei() {
+    public BigInteger getPriceInWei() {
         return this.priceInWei;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class InfuraApiService implements InfuraApiServiceBase {
@@ -22,13 +23,26 @@ public class InfuraApiService implements InfuraApiServiceBase {
 
     @Value("${infura.base.url}" + "${infura.v1.path}")
     private String infuraBaseUrl;
+    @Value("${infura.healthy.failed.read.limit}")
+    private int failedReadLimit;
+    private AtomicInteger failedReadStreak;
 
     private static final String ethGasPriceEndpoint = "eth_gasPrice";
     private static final String getBlockByHashEndpoint = "eth_getBlockByHash";
     private static final String parametersKeyword = "params";
 
     public InfuraApiService() {
+        this.failedReadStreak = new AtomicInteger();
+    }
 
+    /**
+     * Determines whether or not our connection to Infura is healthy.
+     *
+     * @return true if it is, false otherwise.
+     */
+    @Override
+    public boolean isConnectionHealthy() {
+        return this.failedReadStreak.get() <= this.failedReadLimit;
     }
 
     /**
@@ -74,10 +88,12 @@ public class InfuraApiService implements InfuraApiServiceBase {
                               .append(keyValue.getValue())
                               .append("&");
                 }
-                return restTemplate.getForObject(urlBuilder.substring(0, urlBuilder.length() -1), clazz, parameters);
+                var result = restTemplate.getForObject(urlBuilder.substring(0, urlBuilder.length() -1), clazz, parameters);
+                this.failedReadStreak.set(0);
+                return result;
             }
-
         } catch (Exception ex) {
+            this.failedReadStreak.incrementAndGet();
             logger.error(String.format("Error executing request to [%s] with parameters [%s]", urlString, parameters), ex);
             throw ex;
         }

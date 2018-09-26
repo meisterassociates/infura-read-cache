@@ -28,8 +28,11 @@ public class GasMemoryCacheRepository implements GasCacheRepository {
      * {@inheritDoc}
      */
     @Override
-    public void add(GasPrice item) {
-        this.cache.addFirst(item);
+    public void add(GasPrice gasPrice) {
+        if (LocalDateTime.now().minusSeconds(this.purgeAfterSeconds).isAfter(gasPrice.getDatetime())) {
+            return;
+        }
+        this.cache.addFirst(gasPrice);
         this.purge();
     }
 
@@ -41,7 +44,7 @@ public class GasMemoryCacheRepository implements GasCacheRepository {
     public List<GasPrice> query(QueryFilter filter) {
         this.purge();
         return this.cache.stream()
-                .filter(item -> filter.getSince() == null || item.getDatetime().isAfter(filter.getSince()))
+                .filter(gasPrice -> (filter.getSince() == null || gasPrice.getDatetime().isAfter(filter.getSince())))
                 .skip(filter.getPage() * filter.getPageSize())
                 .limit(filter.getPageSize())
                 .collect(Collectors.toList());
@@ -52,6 +55,10 @@ public class GasMemoryCacheRepository implements GasCacheRepository {
      */
     private void purge() {
         var cutoffDateTime = LocalDateTime.now().minusSeconds(this.purgeAfterSeconds);
-        this.cache.removeIf(item -> item.getDatetime().isBefore(cutoffDateTime));
+        this.cache.removeIf(gasPrice -> gasPrice.getDatetime().isBefore(cutoffDateTime));
+    }
+
+    public void setPurgeAfterSeconds(int seconds) {
+        this.purgeAfterSeconds = seconds;
     }
 }

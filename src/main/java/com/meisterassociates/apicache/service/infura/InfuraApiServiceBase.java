@@ -4,6 +4,14 @@ import com.meisterassociates.apicache.model.Block;
 import com.meisterassociates.apicache.model.GasPrice;
 
 public interface InfuraApiServiceBase {
+
+    /**
+     * Determines whether or not our connection to Infura is healthy.
+     *
+     * @return true if it is, false otherwise.
+     */
+    boolean isConnectionHealthy();
+
     /**
      * Gets the current {@link GasPrice} in Wei from the Infura API
      *

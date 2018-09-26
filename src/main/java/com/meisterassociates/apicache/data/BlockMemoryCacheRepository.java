@@ -37,8 +37,11 @@ public class BlockMemoryCacheRepository implements BlockCacheRepository {
      * {@inheritDoc}
      */
     @Override
-    public void add(Block item) {
-        this.cache.put(item.getHash(), item);
+    public void add(Block block) {
+        if (LocalDateTime.now().minusSeconds(this.purgeAfterSeconds).isAfter(block.getDatetime())) {
+            return;
+        }
+        this.cache.put(block.getHash(), block);
         this.purge();
     }
 
@@ -65,7 +68,7 @@ public class BlockMemoryCacheRepository implements BlockCacheRepository {
         var cutoffDateTime = LocalDateTime.now().minusSeconds(this.purgeAfterSeconds);
 
         this.cache.values().stream()
-                .filter(item -> item.getDatetime().isBefore(cutoffDateTime))
-                .forEach(item -> this.cache.remove(item.getHash()));
+                .filter(block -> block.getDatetime().isBefore(cutoffDateTime))
+                .forEach(block -> this.cache.remove(block.getHash()));
     }
 }

@@ -39,6 +39,8 @@ public class InfuraGasPriceCacheService implements GasPriceService{
      */
     public GasPrice getCurrentGasPrice() throws Exception {
         if (this.shouldFetchCurrentGasPrice()) {
+            logger.error(String.format("getCurrentGasPrice: lastRefresh: %s, currentTime: %s, secondsToCache: %s",
+                    this.lastRefresh, LocalDateTime.now(), this.secondsToCache));
             return this.fetchAndCacheCurrentGasPrice();
         }
 
@@ -63,7 +65,7 @@ public class InfuraGasPriceCacheService implements GasPriceService{
 
         BigInteger sum = BigInteger.valueOf(0);
         for (GasPrice gasPrice: gasPrices) {
-            sum = sum.add(gasPrice.getGasPriceInWei());
+            sum = sum.add(gasPrice.getPriceInWei());
         }
 
         logger.debug("getAverageGasPriceSince: Dividing {} by {}.", sum, gasPrices.size());
@@ -78,9 +80,11 @@ public class InfuraGasPriceCacheService implements GasPriceService{
      * @return the newly-cached GasPrice.
      */
     private synchronized GasPrice fetchAndCacheCurrentGasPrice() throws Exception {
-        if (! this.shouldFetchCurrentGasPrice()) {
+        if ( ! this.shouldFetchCurrentGasPrice()) {
+            logger.error(String.format("fetchAndCacheCurrentGasPrice: lastRefresh: %s, currentTime: %s, secondsToCache: %s",
+                    this.lastRefresh, LocalDateTime.now(), this.secondsToCache));
             // This means that there was a race condition and some other request refreshed the cache first.
-            return getCurrentGasPrice();
+            return this.getCurrentGasPrice();
         }
 
         logger.debug("Fetching current Gas Price from Infura...");
@@ -101,4 +105,16 @@ public class InfuraGasPriceCacheService implements GasPriceService{
     private boolean shouldFetchCurrentGasPrice() {
         return LocalDateTime.now().minusSeconds(this.secondsToCache).isAfter(this.lastRefresh);
     }
+
+    /**
+     * Only used for Testing!
+     */
+    public void setLastRefresh(LocalDateTime lastRefresh) {
+        this.lastRefresh = lastRefresh;
+    }
+
+    public void setSecondsToCache(int secondsToCache) {
+        this.secondsToCache = secondsToCache;
+    }
+
 }
