@@ -1,11 +1,8 @@
 package com.meisterassociates.apicache.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 

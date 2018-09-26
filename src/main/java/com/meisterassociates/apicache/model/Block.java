@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 public class Block extends CacheableModel {
@@ -51,6 +52,9 @@ public class Block extends CacheableModel {
                  LocalDateTime datetime) {
         super(datetime);
 
+        uncles = uncles == null ? Collections.emptyList() : uncles;
+        transactions = transactions == null ? Collections.emptyList() : transactions;
+
         this.id = id;
         this.jsonrpc = jsonrpc;
         this.difficulty = difficulty;
@@ -71,8 +75,21 @@ public class Block extends CacheableModel {
         this.timestamp = timestamp;
         this.totalDifficulty = totalDifficulty;
         this.transactionsRoot = transactionsRoot;
-        this.uncles = uncles;
-        this.transactions = transactions;
+        this.uncles = Collections.unmodifiableList(uncles);
+        this.transactions = Collections.unmodifiableList(transactions);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Block)) {
+            return false;
+        }
+        var other = (Block)obj;
+
+        // TODO: Add other checks as necessary.
+        return other.id == this.id
+                && other.jsonrpc.equals(this.jsonrpc)
+                && other.hash.equals(this.hash);
     }
 
     @Override

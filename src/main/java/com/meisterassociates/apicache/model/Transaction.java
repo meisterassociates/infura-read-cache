@@ -35,6 +35,19 @@ public class Transaction {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Transaction)) {
+            return false;
+        }
+        var other = (Transaction)obj;
+
+        // TODO: Add other checks as necessary.
+        return other.hash.equals(this.hash)
+                && other.transactionIndex.equals(this.transactionIndex)
+                && other.to.equals(this.to);
+    }
+
     public String getBlockHash() {
         return blockHash;
     }

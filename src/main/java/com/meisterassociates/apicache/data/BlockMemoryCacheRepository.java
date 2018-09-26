@@ -30,6 +30,7 @@ public class BlockMemoryCacheRepository implements BlockCacheRepository {
      * {@inheritDoc}
      */
     public Block getByHash(String hash) {
+        this.purge();
         return this.cache.get(hash);
     }
 
@@ -70,5 +71,9 @@ public class BlockMemoryCacheRepository implements BlockCacheRepository {
         this.cache.values().stream()
                 .filter(block -> block.getDatetime().isBefore(cutoffDateTime))
                 .forEach(block -> this.cache.remove(block.getHash()));
+    }
+
+    public void setPurgeAfterSeconds(int seconds) {
+        this.purgeAfterSeconds = seconds;
     }
 }

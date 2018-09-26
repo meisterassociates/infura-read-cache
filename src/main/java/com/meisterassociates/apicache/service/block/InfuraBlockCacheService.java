@@ -50,13 +50,12 @@ public class InfuraBlockCacheService implements BlockService {
      * {@inheritDoc}
      */
     @Override
-    public Transaction getTransaction(String blockHash, int index) throws Exception {
+    public Transaction getTransaction(String blockHash, String hexIndex) throws Exception {
         var block = this.getBlockByHash(blockHash);
         if (block == null || block.getTransactions() == null) {
             return null;
         }
 
-        var hexIndex = Utils.getHexString(index);
         var transaction = block.getCastedTransactions().stream()
                 .filter(trans -> trans.getTransactionIndex().equals(hexIndex))
                 .findFirst();
@@ -122,6 +121,7 @@ public class InfuraBlockCacheService implements BlockService {
                 return null;
             }
 
+            // TODO: Maybe add Transactions' GasPrices to GasPriceCache with Transactions' date?
             this.blockCache.add(block);
             return block;
         }

@@ -127,6 +127,21 @@ public class GasMemoryCacheRepositoryTest {
     }
 
     @Test
+    public void testPageQueryOutOfRangeMultipleItemsCached() {
+        var now = LocalDateTime.now();
+        this.gasPriceCacheRepository.setPurgeAfterSeconds(300);
+        var gasPrice1 = new GasPrice(0, "2.0", BigInteger.ONE, now.minusSeconds(30));
+        var gasPrice2 = new GasPrice(0, "2.0", BigInteger.TWO, now);
+
+        this.gasPriceCacheRepository.add(gasPrice1);
+        this.gasPriceCacheRepository.add(gasPrice2);
+
+        var gasPrices = this.gasPriceCacheRepository.query(new QueryFilter(4, 1));
+
+        assertThat(gasPrices.size()).isEqualTo(0);
+    }
+
+    @Test
     public void testDefaultQueryMultipleItemsCachedOnePurged() {
         var now = LocalDateTime.now();
         this.gasPriceCacheRepository.setPurgeAfterSeconds(300);

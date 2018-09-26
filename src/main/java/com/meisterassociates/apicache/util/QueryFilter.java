@@ -61,7 +61,6 @@ public class QueryFilter {
         this.since = since;
     }
 
-
     public int getPage() {
         return page;
     }
