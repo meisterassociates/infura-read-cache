@@ -21,7 +21,6 @@
 
 # Build #
 build/
-gradle/
 out/
 
 # Package Files #
