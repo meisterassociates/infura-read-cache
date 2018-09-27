@@ -60,6 +60,14 @@ public class BaseController {
     }
 
     @SuppressWarnings("unchecked")
+    protected <T> ResponseEntity getErrorPayload(HttpStatus status, T payloadItem) {
+        var map = this.getBaseResponseMap();
+        map.put("result", payloadItem);
+
+        return ResponseEntity.status(status).body(map);
+    }
+
+    @SuppressWarnings("unchecked")
     private Map getBaseResponseMap() {
         var map = new HashMap();
         map.put("id", defaultId);
