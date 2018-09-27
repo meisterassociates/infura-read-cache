@@ -12,7 +12,7 @@ Note: Requests to the endpoints specified above with a network other than `ropst
 # Installation
 
 ## Dependencies
-* Java 10 [download](https://java.com/en/)
+* Java 10 [download](https://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 * Gradle [installation guide](https://docs.gradle.org/current/userguide/installation.html)
 
 ## IDE Support
