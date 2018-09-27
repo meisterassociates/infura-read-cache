@@ -36,9 +36,7 @@ public class InfuraApiService implements InfuraApiServiceBase {
     }
 
     /**
-     * Determines whether or not our connection to Infura is healthy.
-     *
-     * @return true if it is, false otherwise.
+     * {@inheritDoc}
      */
     @Override
     public boolean isConnectionHealthy() {
@@ -50,7 +48,7 @@ public class InfuraApiService implements InfuraApiServiceBase {
      */
     @Override
     public GasPrice getGasPriceInWei() throws Exception {
-        var infuraGasPrice = this.executeRequest(infuraBaseUrl + ethGasPriceEndpoint, null, InfuraGasPriceResult.class);
+        var infuraGasPrice = this.executeGetRequest(infuraBaseUrl + ethGasPriceEndpoint, null, InfuraGasPriceResult.class);
         return infuraGasPrice.toGasPrice();
     }
 
@@ -61,13 +59,24 @@ public class InfuraApiService implements InfuraApiServiceBase {
     public Block getBlockByHash(String hash) throws Exception {
         var paramArray = String.format("[\"%s\",true]", hash);
         var parameters = Map.of(parametersKeyword, paramArray);
-        var infuraBlock = this.executeRequest(infuraBaseUrl + getBlockByHashEndpoint, parameters, InfuraBlockResult.class);
+        var infuraBlock = this.executeGetRequest(infuraBaseUrl + getBlockByHashEndpoint, parameters, InfuraBlockResult.class);
         logger.debug("Received Block from Infura: {}", infuraBlock);
 
         return infuraBlock.toBlock();
     }
 
-    private <T> T executeRequest(String urlString, Map<String, String> parameters, Class<T> clazz) throws Exception {
+    /**
+     * Executes a GET request to the provided url, with the provided querystring parameters, parsing the response as
+     * the provided class.
+     *
+     * @param urlString The url for the GET request
+     * @param parameters The querystring parameters as key-value pairs
+     * @param clazz The return type
+     * @param <T> The type of the class to return
+     * @return The parsed response
+     * @throws Exception If there is an error performing the request
+     */
+    private <T> T executeGetRequest(String urlString, Map<String, String> parameters, Class<T> clazz) throws Exception {
         logger.debug("Executing Infura fetch to url {} with querystring: {}", urlString, parameters);
         try {
             var httpClient = HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();

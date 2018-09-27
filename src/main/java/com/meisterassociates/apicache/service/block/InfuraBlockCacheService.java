@@ -5,7 +5,6 @@ import com.meisterassociates.apicache.model.Block;
 import com.meisterassociates.apicache.model.Transaction;
 import com.meisterassociates.apicache.service.infura.InfuraApiServiceBase;
 import com.meisterassociates.apicache.util.QueryFilter;
-import com.meisterassociates.apicache.util.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
